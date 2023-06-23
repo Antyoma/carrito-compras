@@ -2,9 +2,11 @@
 let allContainerCart = document.querySelector('.products');
 let containerBuyCart = document.querySelector('.card-items');
 let priceTotal = document.querySelector('.price-total');
+let amountProduct = document.querySelector('.count-product');
 
 let buyThings = [];
 let totalCard = 0;
+let countProduct = 0;
 
 //funciones
 loadEventListenrs();
@@ -25,8 +27,21 @@ function addProduct(e){
 function deleteProduct(e){
     if (e.target.classList.contains('delete-product')){
         const deleteId = e.target.getAttribute('data-id');
+
+        buyThings.forEach(value => {
+            if (value.id == deleteId){
+                let priceReduce = parseFloat(value.price) * parseFloat(value.amount);
+                totalCard = totalCard - priceReduce;
+                totalCard = totalCard.toFixed(2);
+            }
+        });
         buyThings = buyThings.filter(product => product.id !== deleteId);
-    }  
+        countProduct--;
+    }
+    if (buyThings.length === 0) {
+        priceTotal.innerHTML = 0;
+        amountProduct.innerHTML = 0;
+    }
     loadHtml();
 }
 
@@ -55,7 +70,7 @@ function readTheContent(product){
         buyThings = [...pro];
     }else{
         buyThings = [... buyThings,infoProduct]
-
+        countProduct++;
     }
     loadHtml();
     //console.log(infoProduct);
@@ -80,6 +95,8 @@ function loadHtml(){
         containerBuyCart.appendChild(row);
 
         priceTotal.innerHTML = totalCard;
+
+        amountProduct.innerHTML = countProduct;
     });
 }
 function clearHtml(){
