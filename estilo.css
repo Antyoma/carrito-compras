@@ -1,8 +1,9 @@
 body{
     font-family: system-ui;
+    background-color: gray;
 }
 header{
-    background-color: #e4e4e8;
+    background-color: #e4e4e87d;
     padding-top: 18px;
     padding-bottom: 18px;
     box-shadow: 0 7px 8px -3px grey;

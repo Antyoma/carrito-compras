@@ -1,12 +1,17 @@
 //variables
 let allContainerCart = document.querySelector('.products');
+let containerBuyCart = document.querySelector('.card-items');
+let priceTotal = document.querySelector('.price-total');
 
-let busThings = [];
+let buyThings = [];
+let totalCard = 0;
 
 //funciones
 loadEventListenrs();
 function loadEventListenrs(){
     allContainerCart.addEventListener('click', addProduct);
+
+    containerBuyCart.addEventListener('click', deleteProduct);
 }
 
 function addProduct(e){
@@ -14,12 +19,19 @@ function addProduct(e){
     if (e.target.classList.contains('btn-add-cart')){
         const selectProduct = e.target.parentElement;
         readTheContent(selectProduct);
-        //console.log (e.target.parentElement);
     }   
 }
 
+function deleteProduct(e){
+    if (e.target.classList.contains('delete-product')){
+        const deleteId = e.target.getAttribute('data-id');
+        buyThings = buyThings.filter(product => product.id !== deleteId);
+    }  
+    loadHtml();
+}
+
 function readTheContent(product){
-    const infoproduct = {
+    const infoProduct = {
         image: product.querySelector('div img').src,
         title: product.querySelector('.title').textContent,
         price: product.querySelector('div p span').textContent,
@@ -27,12 +39,30 @@ function readTheContent(product){
         amount: 1
     }
 
-    busThings = [...buyThings, infoproduct]
+    totalCard = parseFloat(totalCard) + parseFloat(infoProduct.price);
+    totalCard = totalCard.toFixed(2);
+
+    const exist = buyThings.some(product => product.id === infoProduct.id);
+    if (exist){
+        const pro = buyThings.map(product => {
+            if (product.id === infoProduct.id){
+                product.amount++;
+                return product;
+            }else{
+                return product
+            }
+        });
+        buyThings = [...pro];
+    }else{
+        buyThings = [... buyThings,infoProduct]
+
+    }
     loadHtml();
-    console.log(infoproduct);
+    //console.log(infoProduct);
 }
 
 function loadHtml(){
+    clearHtml();
     buyThings.forEach(product => {
         const { image, title, price, amount, id } = product;
         const row = document.createElement('div');
@@ -45,6 +75,13 @@ function loadHtml(){
                     <h6>Amount: ${amount}</h6>
             </div>
         <span class="delete-product" data-id="${id}">X</span>
-        `
+        `;
+
+        containerBuyCart.appendChild(row);
+
+        priceTotal.innerHTML = totalCard;
     });
+}
+function clearHtml(){
+    containerBuyCart.innerHTML = '';
 }
