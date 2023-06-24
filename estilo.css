@@ -89,7 +89,7 @@ header{
     }
 
 .carts:hover {
-    transform: scale(1.5);
+    transform: scale(1.2);
     z-index: 2;
 }
 .carts:hover > div {
